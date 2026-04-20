@@ -115,28 +115,56 @@ function postJson(targetUrl, payload) {
 
 async function sendBindKeyboard(chatId) {
   const keyboard = {
-    keyboard: [[{ text: '📱 Поделиться номером', request_contact: true }]],
+    keyboard: [
+      [
+        { text: '📱 Поделиться номером', request_contact: true }
+      ]
+    ],
     resize_keyboard: true,
-    one_time_keyboard: true,
+    one_time_keyboard: false
   };
 
   await tgApi('sendMessage', {
     chat_id: String(chatId),
     text: 'Нажмите кнопку ниже и отправьте контакт с тем же номером, который указан у вас в магазине.',
-    reply_markup: keyboard,
+    reply_markup: keyboard
   });
 }
 
-async function sendMiniAppKeyboard(chatId) {
-  const replyKeyboard = {
-    keyboard: [[{ text: '💜 Личный кабинет', web_app: { url: MINI_APP_URL } }]],
-    resize_keyboard: true,
-  };
-
+async function removeReplyKeyboard(chatId) {
   await tgApi('sendMessage', {
     chat_id: String(chatId),
-    text: '✅ Номер успешно привязан!\n\nНажмите кнопку ниже, чтобы открыть личный кабинет ZMAstore.',
-    reply_markup: replyKeyboard,
+    text: '✅ Номер успешно привязан!',
+    reply_markup: {
+      remove_keyboard: true
+    }
+  });
+}
+
+async function setNativeTelegramMiniAppButton(chatId) {
+  await tgApi('setChatMenuButton', {
+    chat_id: String(chatId),
+    menu_button: {
+      type: 'web_app',
+      text: 'Личный кабинет',
+      web_app: {
+        url: MINI_APP_URL
+      }
+    }
+  });
+}
+
+async function sendSuccessMessage(chatId) {
+  await tgApi('sendMessage', {
+    chat_id: String(chatId),
+    text: '💜 Личный кабинет теперь доступен через родную кнопку Telegram.'
+  });
+}
+
+async function sendError(chatId, text) {
+  await tgApi('sendMessage', {
+    chat_id: String(chatId),
+    text
   });
 }
 
@@ -156,16 +184,8 @@ async function handleMessage(message) {
     return;
   }
 
-  if (text === '💜 Личный кабинет') {
-    await sendMiniAppKeyboard(chatId);
-    return;
-  }
-
   if (!message.contact) {
-    await tgApi('sendMessage', {
-      chat_id: String(chatId),
-      text: 'Для привязки используйте кнопку «📱 Поделиться номером».',
-    });
+    await sendError(chatId, 'Для привязки используйте кнопку «📱 Поделиться номером».');
     return;
   }
 
@@ -173,20 +193,14 @@ async function handleMessage(message) {
   const contactUserId = String(contact.user_id || '');
 
   if (contactUserId && telegramId && contactUserId !== telegramId) {
-    await tgApi('sendMessage', {
-      chat_id: String(chatId),
-      text: 'Пожалуйста, отправьте именно свой номер через системную кнопку Telegram.',
-    });
+    await sendError(chatId, 'Пожалуйста, отправьте именно свой номер через системную кнопку Telegram.');
     return;
   }
 
   const phone = normalizePhone(contact.phone_number || '');
 
   if (!phone) {
-    await tgApi('sendMessage', {
-      chat_id: String(chatId),
-      text: 'Не удалось прочитать номер. Попробуйте ещё раз.',
-    });
+    await sendError(chatId, 'Не удалось прочитать номер. Попробуйте ещё раз.');
     return;
   }
 
@@ -196,18 +210,22 @@ async function handleMessage(message) {
     username,
     first_name: firstName,
     last_name: lastName,
-    phone,
+    phone
   });
 
-  if (!bindResult || !bindResult.ok) {
-    await tgApi('sendMessage', {
-      chat_id: String(chatId),
-      text: String(bindResult?.message || 'Не удалось привязать номер. Попробуйте ещё раз позже.'),
-    });
+  if (!bindResult) {
+    await sendError(chatId, 'Не удалось связаться с сервером магазина. Попробуйте ещё раз позже.');
     return;
   }
 
-  await sendMiniAppKeyboard(chatId);
+  if (!bindResult.ok) {
+    await sendError(chatId, String(bindResult.message || 'Не удалось привязать номер. Попробуйте ещё раз позже.'));
+    return;
+  }
+
+  await removeReplyKeyboard(chatId);
+  await setNativeTelegramMiniAppButton(chatId);
+  await sendSuccessMessage(chatId);
 }
 
 const server = http.createServer((req, res) => {
@@ -247,10 +265,7 @@ const server = http.createServer((req, res) => {
       const chatId = update?.message?.chat?.id;
       if (!chatId) return;
 
-      await tgApi('sendMessage', {
-        chat_id: String(chatId),
-        text: 'Произошла ошибка. Попробуйте ещё раз.',
-      });
+      await sendError(chatId, 'Произошла ошибка. Попробуйте ещё раз.');
     });
   });
 });
