@@ -157,7 +157,7 @@ async function setNativeTelegramMiniAppButton(chatId) {
 async function sendSuccessMessage(chatId) {
   await tgApi('sendMessage', {
     chat_id: String(chatId),
-    text: '💜 Личный кабинет теперь доступен через родную кнопку Telegram.'
+    text: '💜 Личный кабинет теперь доступен через кнопку в нижнем левом углу.'
   });
 }
 
