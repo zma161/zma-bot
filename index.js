@@ -154,24 +154,36 @@ async function handleMessage(message) {
     phone,
   });
 
-  if (!bindResult || !bindResult.ok) {
-    await tgApi('sendMessage', {
-      chat_id: String(chatId),
-      text: String(bindResult?.message || 'Не удалось привязать номер. Попробуйте ещё раз позже.'),
-    });
-    return;
-  }
+  const bindResult = await postJson(BITRIX_BIND_URL, {
+  secret: BIND_SECRET,
+  telegram_id: telegramId,
+  username,
+  first_name: firstName,
+  last_name: lastName,
+  phone,
+});
 
-  const inlineKeyboard = {
-    inline_keyboard: [[{ text: '💜 Открыть кабинет ZMA', web_app: { url: MINI_APP_URL } }]],
-  };
-
+if (!bindResult || !bindResult.ok) {
   await tgApi('sendMessage', {
     chat_id: String(chatId),
-    text: 'Готово! Номер успешно привязан.',
-    reply_markup: inlineKeyboard,
+    text: String(bindResult?.message || 'Не удалось привязать номер. Попробуйте ещё раз позже.'),
   });
+  return;
 }
+
+const replyKeyboard = {
+  keyboard: [[
+    { text: '💜 Открыть личный кабинет ZMA', web_app: { url: MINI_APP_URL } }
+  ]],
+  resize_keyboard: true,
+  is_persistent: true
+};
+
+await tgApi('sendMessage', {
+  chat_id: String(chatId),
+  text: '✅ Номер успешно привязан!\n\nНажмите кнопку ниже, чтобы открыть личный кабинет ZMAstore.',
+  reply_markup: replyKeyboard,
+});
 
 const server = http.createServer((req, res) => {
   if (req.method === 'GET' && req.url === '/') {
