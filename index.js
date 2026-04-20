@@ -18,45 +18,32 @@ function normalizePhone(phone) {
 function tgApi(method, data) {
   return new Promise((resolve) => {
     const body = new URLSearchParams();
-
     Object.entries(data || {}).forEach(([key, value]) => {
-      if (typeof value === 'string') {
-        body.append(key, value);
-      } else {
-        body.append(key, JSON.stringify(value));
-      }
+      body.append(key, typeof value === 'string' ? value : JSON.stringify(value));
     });
 
-    const req = https.request(
-      {
-        hostname: 'api.telegram.org',
-        path: `/bot${BOT_TOKEN}/${method}`,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': Buffer.byteLength(body.toString()),
-        },
-        timeout: 15000,
+    const req = https.request({
+      hostname: 'api.telegram.org',
+      path: `/bot${BOT_TOKEN}/${method}`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(body.toString()),
       },
-      (res) => {
-        let raw = '';
-
-        res.on('data', (chunk) => {
-          raw += chunk;
-        });
-
-        res.on('end', () => {
-          try {
-            resolve(JSON.parse(raw));
-          } catch {
-            resolve(null);
-          }
-        });
-      }
-    );
+      timeout: 15000,
+    }, (res) => {
+      let raw = '';
+      res.on('data', (chunk) => raw += chunk);
+      res.on('end', () => {
+        try {
+          resolve(JSON.parse(raw));
+        } catch {
+          resolve(null);
+        }
+      });
+    });
 
     req.on('error', () => resolve(null));
-
     req.on('timeout', () => {
       req.destroy();
       resolve(null);
@@ -72,37 +59,29 @@ function postJson(targetUrl, payload) {
     const u = new URL(targetUrl);
     const body = JSON.stringify(payload);
 
-    const req = https.request(
-      {
-        hostname: u.hostname,
-        path: `${u.pathname}${u.search}`,
-        method: 'POST',
-        port: u.port || 443,
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          'Content-Length': Buffer.byteLength(body),
-        },
-        timeout: 20000,
+    const req = https.request({
+      hostname: u.hostname,
+      path: `${u.pathname}${u.search}`,
+      method: 'POST',
+      port: u.port || 443,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Length': Buffer.byteLength(body),
       },
-      (res) => {
-        let raw = '';
-
-        res.on('data', (chunk) => {
-          raw += chunk;
-        });
-
-        res.on('end', () => {
-          try {
-            resolve(JSON.parse(raw));
-          } catch {
-            resolve(null);
-          }
-        });
-      }
-    );
+      timeout: 20000,
+    }, (res) => {
+      let raw = '';
+      res.on('data', (chunk) => raw += chunk);
+      res.on('end', () => {
+        try {
+          resolve(JSON.parse(raw));
+        } catch {
+          resolve(null);
+        }
+      });
+    });
 
     req.on('error', () => resolve(null));
-
     req.on('timeout', () => {
       req.destroy();
       resolve(null);
@@ -110,33 +89,6 @@ function postJson(targetUrl, payload) {
 
     req.write(body);
     req.end();
-  });
-}
-
-async function sendBindKeyboard(chatId) {
-  const keyboard = {
-    keyboard: [[{ text: '📱 Поделиться номером', request_contact: true }]],
-    resize_keyboard: true,
-    one_time_keyboard: true,
-  };
-
-  await tgApi('sendMessage', {
-    chat_id: String(chatId),
-    text: 'Нажмите кнопку ниже и отправьте контакт с тем же номером, который указан у вас в магазине.',
-    reply_markup: keyboard,
-  });
-}
-
-async function sendMiniAppKeyboard(chatId) {
-  const replyKeyboard = {
-    keyboard: [[{ text: '💜 Личный кабинет', web_app: { url: MINI_APP_URL } }]],
-    resize_keyboard: true,
-  };
-
-  await tgApi('sendMessage', {
-    chat_id: String(chatId),
-    text: '✅ Номер успешно привязан!\n\nНажмите кнопку ниже, чтобы открыть личный кабинет ZMAstore.',
-    reply_markup: replyKeyboard,
   });
 }
 
@@ -152,12 +104,17 @@ async function handleMessage(message) {
   const lastName = String(from.last_name || '').trim();
 
   if (text === '/start' || text === '/start bind_phone') {
-    await sendBindKeyboard(chatId);
-    return;
-  }
+    const keyboard = {
+      keyboard: [[{ text: '📱 Поделиться номером', request_contact: true }]],
+      resize_keyboard: true,
+      one_time_keyboard: true,
+    };
 
-  if (text === '💜 Личный кабинет') {
-    await sendMiniAppKeyboard(chatId);
+    await tgApi('sendMessage', {
+      chat_id: String(chatId),
+      text: 'Нажмите кнопку ниже и отправьте контакт с тем же номером, который указан у вас в магазине.',
+      reply_markup: keyboard,
+    });
     return;
   }
 
@@ -171,7 +128,6 @@ async function handleMessage(message) {
 
   const contact = message.contact;
   const contactUserId = String(contact.user_id || '');
-
   if (contactUserId && telegramId && contactUserId !== telegramId) {
     await tgApi('sendMessage', {
       chat_id: String(chatId),
@@ -181,7 +137,6 @@ async function handleMessage(message) {
   }
 
   const phone = normalizePhone(contact.phone_number || '');
-
   if (!phone) {
     await tgApi('sendMessage', {
       chat_id: String(chatId),
@@ -207,7 +162,15 @@ async function handleMessage(message) {
     return;
   }
 
-  await sendMiniAppKeyboard(chatId);
+  const inlineKeyboard = {
+    inline_keyboard: [[{ text: '💜 Открыть личный кабинет ZMA', web_app: { url: MINI_APP_URL } }]],
+  };
+
+  await tgApi('sendMessage', {
+    chat_id: String(chatId),
+    text: '✅ Номер успешно привязан!\n\nНажмите большую кнопку ниже, чтобы открыть личный кабинет ZMAstore.',
+    reply_markup: inlineKeyboard,
+  });
 }
 
 const server = http.createServer((req, res) => {
@@ -224,17 +187,12 @@ const server = http.createServer((req, res) => {
   }
 
   let raw = '';
-
-  req.on('data', (chunk) => {
-    raw += chunk;
-  });
-
+  req.on('data', (chunk) => raw += chunk);
   req.on('end', () => {
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify({ ok: true }));
 
     let update = null;
-
     try {
       update = JSON.parse(raw);
     } catch {
@@ -242,16 +200,7 @@ const server = http.createServer((req, res) => {
     }
 
     if (!update || !update.message) return;
-
-    handleMessage(update.message).catch(async () => {
-      const chatId = update?.message?.chat?.id;
-      if (!chatId) return;
-
-      await tgApi('sendMessage', {
-        chat_id: String(chatId),
-        text: 'Произошла ошибка. Попробуйте ещё раз.',
-      });
-    });
+    handleMessage(update.message).catch(() => {});
   });
 });
 
