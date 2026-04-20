@@ -163,7 +163,7 @@ async function handleMessage(message) {
   }
 
   const inlineKeyboard = {
-    inline_keyboard: [[{ text: '🚀 Открыть mini app', web_app: { url: MINI_APP_URL } }]],
+    inline_keyboard: [[{ text: '💜 Открыть кабинет ZMA', web_app: { url: MINI_APP_URL } }]],
   };
 
   await tgApi('sendMessage', {
