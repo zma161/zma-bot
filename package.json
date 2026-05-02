@@ -1,6 +1,6 @@
 {
   "name": "zma-bothost-bot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Telegram bot for contact binding with Bitrix HL",
   "main": "index.js",
   "scripts": {
