@@ -3,7 +3,7 @@ const https = require('https');
 const { URL } = require('url');
 
 const BOT_TOKEN = process.env.BOT_TOKEN || 'YOUR_BOT_TOKEN';
-const MINI_APP_URL = process.env.MINI_APP_URL || 'https://zma24.ru/tg-app/';
+const MINI_APP_URL = process.env.MINI_APP_URL || 'https://zma24.ru/tg-app/?v=zma261';
 const BITRIX_BIND_URL = process.env.BITRIX_BIND_URL || 'https://zma24.ru/local/tools/tg_bind_phone_from_bot.php';
 const BIND_SECRET = process.env.BIND_SECRET || 'YOUR_SHARED_SECRET';
 const PORT = process.env.PORT || 3000;
