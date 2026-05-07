@@ -146,7 +146,7 @@ async function setNativeTelegramMiniAppButton(chatId) {
     chat_id: String(chatId),
     menu_button: {
       type: 'web_app',
-      text: 'Личный кабинет',
+      text: 'Открыть приложение',
       web_app: {
         url: MINI_APP_URL
       }
@@ -157,7 +157,7 @@ async function setNativeTelegramMiniAppButton(chatId) {
 async function sendSuccessMessage(chatId) {
   await tgApi('sendMessage', {
     chat_id: String(chatId),
-    text: '💜 Платформа магазина теперь доступна через кнопку в нижнем левом углу.'
+    text: '🧡 Приложение магазина теперь доступна через кнопку в нижнем левом углу.'
   });
 }
 
