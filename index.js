@@ -10,6 +10,25 @@ const BITRIX_BIND_URL = process.env.BITRIX_BIND_URL || 'https://zma24.ru/local/t
 const BIND_SECRET = process.env.BIND_SECRET || 'YOUR_SHARED_SECRET';
 const PORT = process.env.PORT || 3000;
 
+const T = {
+  sharePhoneButton: '\uD83D\uDCF1 \u041F\u043E\u0434\u0435\u043B\u0438\u0442\u044C\u0441\u044F \u043D\u043E\u043C\u0435\u0440\u043E\u043C',
+  bindPrompt: '\u041D\u0430\u0436\u043C\u0438\u0442\u0435 \u043A\u043D\u043E\u043F\u043A\u0443 \u043D\u0438\u0436\u0435 \u0438 \u043E\u0442\u043F\u0440\u0430\u0432\u044C\u0442\u0435 \u043A\u043E\u043D\u0442\u0430\u043A\u0442 \u0441 \u0442\u0435\u043C \u0436\u0435 \u043D\u043E\u043C\u0435\u0440\u043E\u043C, \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u0443\u043A\u0430\u0437\u0430\u043D \u0443 \u0432\u0430\u0441 \u0432 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0435.',
+  bindSuccess: '\u2705 \u041D\u043E\u043C\u0435\u0440 \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u043F\u0440\u0438\u0432\u044F\u0437\u0430\u043D!',
+  openAppMenu: '\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435',
+  devKeyboard: 'DEV',
+  publicKeyboard: '\u041F\u0443\u0431\u043B\u0438\u0447\u043D\u0430\u044F',
+  devReady: '\uD83D\uDEE0 \u0414\u043B\u044F \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0430 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B \u0434\u0432\u0435 \u043A\u043D\u043E\u043F\u043A\u0438: DEV \u0438 \u043F\u0443\u0431\u043B\u0438\u0447\u043D\u0430\u044F \u0432\u0435\u0440\u0441\u0438\u044F. \u041E\u0431\u044B\u0447\u043D\u044B\u0435 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438 \u0432\u0438\u0434\u044F\u0442 \u0442\u043E\u043B\u044C\u043A\u043E \u0441\u0442\u0430\u0431\u0438\u043B\u044C\u043D\u0443\u044E \u0432\u0435\u0440\u0441\u0438\u044E.',
+  successPublic: '\uD83E\uDDE1 \u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0430 \u0442\u0435\u043F\u0435\u0440\u044C \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u043E \u0447\u0435\u0440\u0435\u0437 \u043A\u043D\u043E\u043F\u043A\u0443 \u0432 \u043D\u0438\u0436\u043D\u0435\u043C \u043B\u0435\u0432\u043E\u043C \u0443\u0433\u043B\u0443.',
+  devOnly: 'DEV-\u043A\u043D\u043E\u043F\u043A\u0438 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u044B \u0442\u043E\u043B\u044C\u043A\u043E \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0443.',
+  publicEnabled: '\u041F\u0443\u0431\u043B\u0438\u0447\u043D\u0430\u044F \u043A\u043D\u043E\u043F\u043A\u0430 \u0432\u043A\u043B\u044E\u0447\u0435\u043D\u0430.',
+  contactRequired: '\u0414\u043B\u044F \u043F\u0440\u0438\u0432\u044F\u0437\u043A\u0438 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0442\u0435 \u043A\u043D\u043E\u043F\u043A\u0443 \u00AB\uD83D\uDCF1 \u041F\u043E\u0434\u0435\u043B\u0438\u0442\u044C\u0441\u044F \u043D\u043E\u043C\u0435\u0440\u043E\u043C\u00BB.',
+  ownPhoneRequired: '\u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u043E\u0442\u043F\u0440\u0430\u0432\u044C\u0442\u0435 \u0438\u043C\u0435\u043D\u043D\u043E \u0441\u0432\u043E\u0439 \u043D\u043E\u043C\u0435\u0440 \u0447\u0435\u0440\u0435\u0437 \u0441\u0438\u0441\u0442\u0435\u043C\u043D\u0443\u044E \u043A\u043D\u043E\u043F\u043A\u0443 Telegram.',
+  phoneReadFailed: '\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043F\u0440\u043E\u0447\u0438\u0442\u0430\u0442\u044C \u043D\u043E\u043C\u0435\u0440. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0435\u0449\u0451 \u0440\u0430\u0437.',
+  serverFailed: '\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0441\u0432\u044F\u0437\u0430\u0442\u044C\u0441\u044F \u0441 \u0441\u0435\u0440\u0432\u0435\u0440\u043E\u043C \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0430. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0435\u0449\u0451 \u0440\u0430\u0437 \u043F\u043E\u0437\u0436\u0435.',
+  bindFailed: '\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043F\u0440\u0438\u0432\u044F\u0437\u0430\u0442\u044C \u043D\u043E\u043C\u0435\u0440. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0435\u0449\u0451 \u0440\u0430\u0437 \u043F\u043E\u0437\u0436\u0435.',
+  genericError: '\u041F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u0430 \u043E\u0448\u0438\u0431\u043A\u0430. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0435\u0449\u0451 \u0440\u0430\u0437.'
+};
+
 function normalizePhone(phone) {
   let value = String(phone || '').replace(/\D+/g, '');
   if (value.length === 11 && value[0] === '8') value = '7' + value.slice(1);
@@ -33,14 +52,16 @@ function tgApi(method, data) {
       }
     });
 
+    const bodyText = body.toString();
+
     const req = https.request(
       {
         hostname: 'api.telegram.org',
         path: `/bot${BOT_TOKEN}/${method}`,
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': Buffer.byteLength(body.toString()),
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'Content-Length': Buffer.byteLength(bodyText),
         },
         timeout: 15000,
       },
@@ -68,7 +89,7 @@ function tgApi(method, data) {
       resolve(null);
     });
 
-    req.write(body.toString());
+    req.write(bodyText);
     req.end();
   });
 }
@@ -123,7 +144,7 @@ async function sendBindKeyboard(chatId) {
   const keyboard = {
     keyboard: [
       [
-        { text: 'рџ“± РџРѕРґРµР»РёС‚СЊСЃСЏ РЅРѕРјРµСЂРѕРј', request_contact: true }
+        { text: T.sharePhoneButton, request_contact: true }
       ]
     ],
     resize_keyboard: true,
@@ -132,7 +153,7 @@ async function sendBindKeyboard(chatId) {
 
   await tgApi('sendMessage', {
     chat_id: String(chatId),
-    text: 'РќР°Р¶РјРёС‚Рµ РєРЅРѕРїРєСѓ РЅРёР¶Рµ Рё РѕС‚РїСЂР°РІСЊС‚Рµ РєРѕРЅС‚Р°РєС‚ СЃ С‚РµРј Р¶Рµ РЅРѕРјРµСЂРѕРј, РєРѕС‚РѕСЂС‹Р№ СѓРєР°Р·Р°РЅ Сѓ РІР°СЃ РІ РјР°РіР°Р·РёРЅРµ.',
+    text: T.bindPrompt,
     reply_markup: keyboard
   });
 }
@@ -140,61 +161,67 @@ async function sendBindKeyboard(chatId) {
 async function removeReplyKeyboard(chatId) {
   await tgApi('sendMessage', {
     chat_id: String(chatId),
-    text: 'вњ… РќРѕРјРµСЂ СѓСЃРїРµС€РЅРѕ РїСЂРёРІСЏР·Р°РЅ!',
+    text: T.bindSuccess,
     reply_markup: {
       remove_keyboard: true
     }
   });
 }
 
-async function setNativeTelegramMiniAppButton(chatId, telegramId = '') {
-  const isDeveloper = isDeveloperTelegramId(telegramId || chatId);
-
-  await tgApi('setChatMenuButton', {
-    chat_id: String(chatId),
+async function setPublicNativeMiniAppButton(chatId = null) {
+  const payload = {
     menu_button: {
       type: 'web_app',
-      text: isDeveloper ? 'DEV РїСЂРёР»РѕР¶РµРЅРёРµ' : 'РћС‚РєСЂС‹С‚СЊ РїСЂРёР»РѕР¶РµРЅРёРµ',
+      text: T.openAppMenu,
       web_app: {
-        url: isDeveloper ? DEV_MINI_APP_URL : MINI_APP_URL
+        url: MINI_APP_URL
       }
     }
-  });
+  };
+
+  if (chatId) payload.chat_id = String(chatId);
+
+  await tgApi('setChatMenuButton', payload);
 }
 
-async function sendDeveloperMiniAppButton(chatId) {
-  await setNativeTelegramMiniAppButton(chatId, DEVELOPER_TELEGRAM_ID);
+async function sendDeveloperMiniAppButtons(chatId) {
+  await setPublicNativeMiniAppButton(chatId);
 
   await tgApi('sendMessage', {
     chat_id: String(chatId),
-    text: 'рџ›  DEV-РєРЅРѕРїРєР° РІРєР»СЋС‡РµРЅР° С‚РѕР»СЊРєРѕ РґР»СЏ СЂР°Р·СЂР°Р±РѕС‚С‡РёРєР°. РћР±С‹С‡РЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»Рё РїСЂРѕРґРѕР»Р¶Р°СЋС‚ РѕС‚РєСЂС‹РІР°С‚СЊ СЃС‚Р°Р±РёР»СЊРЅСѓСЋ РІРµСЂСЃРёСЋ РїСЂРёР»РѕР¶РµРЅРёСЏ.',
+    text: T.devReady,
     reply_markup: {
-      inline_keyboard: [
+      keyboard: [
         [
           {
-            text: 'РћС‚РєСЂС‹С‚СЊ DEV Mini App',
+            text: T.devKeyboard,
             web_app: {
               url: DEV_MINI_APP_URL
             }
-          }
-        ],
-        [
+          },
           {
-            text: 'РћС‚РєСЂС‹С‚СЊ РѕР±С‹С‡РЅСѓСЋ РІРµСЂСЃРёСЋ',
+            text: T.publicKeyboard,
             web_app: {
               url: MINI_APP_URL
             }
           }
         ]
-      ]
+      ],
+      resize_keyboard: true,
+      one_time_keyboard: false
     }
   });
 }
 
-async function sendSuccessMessage(chatId) {
+async function sendSuccessMessage(chatId, telegramId = '') {
+  if (isDeveloperTelegramId(telegramId)) {
+    await sendDeveloperMiniAppButtons(chatId);
+    return;
+  }
+
   await tgApi('sendMessage', {
     chat_id: String(chatId),
-    text: 'рџ§Ў РџСЂРёР»РѕР¶РµРЅРёРµ РјР°РіР°Р·РёРЅР° С‚РµРїРµСЂСЊ РґРѕСЃС‚СѓРїРЅР° С‡РµСЂРµР· РєРЅРѕРїРєСѓ РІ РЅРёР¶РЅРµРј Р»РµРІРѕРј СѓРіР»Сѓ.'
+    text: T.successPublic
   });
 }
 
@@ -218,21 +245,30 @@ async function handleMessage(message) {
 
   if (text === '/dev') {
     if (!isDeveloperTelegramId(telegramId)) {
-      await sendError(chatId, 'DEV-РєРЅРѕРїРєР° РґРѕСЃС‚СѓРїРЅР° С‚РѕР»СЊРєРѕ СЂР°Р·СЂР°Р±РѕС‚С‡РёРєСѓ.');
+      await setPublicNativeMiniAppButton(chatId);
+      await sendError(chatId, T.devOnly);
       return;
     }
 
-    await sendDeveloperMiniAppButton(chatId);
+    await sendDeveloperMiniAppButtons(chatId);
+    return;
+  }
+
+  if (text === '/public') {
+    await setPublicNativeMiniAppButton(chatId);
+    await sendError(chatId, T.publicEnabled);
     return;
   }
 
   if (text === '/start' || text === '/start bind_phone') {
+    await setPublicNativeMiniAppButton(chatId);
     await sendBindKeyboard(chatId);
     return;
   }
 
   if (!message.contact) {
-    await sendError(chatId, 'Р”Р»СЏ РїСЂРёРІСЏР·РєРё РёСЃРїРѕР»СЊР·СѓР№С‚Рµ РєРЅРѕРїРєСѓ В«рџ“± РџРѕРґРµР»РёС‚СЊСЃСЏ РЅРѕРјРµСЂРѕРјВ».');
+    await setPublicNativeMiniAppButton(chatId);
+    await sendError(chatId, T.contactRequired);
     return;
   }
 
@@ -240,14 +276,14 @@ async function handleMessage(message) {
   const contactUserId = String(contact.user_id || '');
 
   if (contactUserId && telegramId && contactUserId !== telegramId) {
-    await sendError(chatId, 'РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РѕС‚РїСЂР°РІСЊС‚Рµ РёРјРµРЅРЅРѕ СЃРІРѕР№ РЅРѕРјРµСЂ С‡РµСЂРµР· СЃРёСЃС‚РµРјРЅСѓСЋ РєРЅРѕРїРєСѓ Telegram.');
+    await sendError(chatId, T.ownPhoneRequired);
     return;
   }
 
   const phone = normalizePhone(contact.phone_number || '');
 
   if (!phone) {
-    await sendError(chatId, 'РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРѕС‡РёС‚Р°С‚СЊ РЅРѕРјРµСЂ. РџРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰С‘ СЂР°Р·.');
+    await sendError(chatId, T.phoneReadFailed);
     return;
   }
 
@@ -261,18 +297,18 @@ async function handleMessage(message) {
   });
 
   if (!bindResult) {
-    await sendError(chatId, 'РќРµ СѓРґР°Р»РѕСЃСЊ СЃРІСЏР·Р°С‚СЊСЃСЏ СЃ СЃРµСЂРІРµСЂРѕРј РјР°РіР°Р·РёРЅР°. РџРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰С‘ СЂР°Р· РїРѕР·Р¶Рµ.');
+    await sendError(chatId, T.serverFailed);
     return;
   }
 
   if (!bindResult.ok) {
-    await sendError(chatId, String(bindResult.message || 'РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРёРІСЏР·Р°С‚СЊ РЅРѕРјРµСЂ. РџРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰С‘ СЂР°Р· РїРѕР·Р¶Рµ.'));
+    await sendError(chatId, String(bindResult.message || T.bindFailed));
     return;
   }
 
   await removeReplyKeyboard(chatId);
-  await setNativeTelegramMiniAppButton(chatId, telegramId);
-  await sendSuccessMessage(chatId);
+  await setPublicNativeMiniAppButton(chatId);
+  await sendSuccessMessage(chatId, telegramId);
 }
 
 const server = http.createServer((req, res) => {
@@ -312,11 +348,12 @@ const server = http.createServer((req, res) => {
       const chatId = update?.message?.chat?.id;
       if (!chatId) return;
 
-      await sendError(chatId, 'РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР°. РџРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰С‘ СЂР°Р·.');
+      await sendError(chatId, T.genericError);
     });
   });
 });
 
 server.listen(PORT, () => {
   console.log(`Bot server started on port ${PORT}`);
+  setPublicNativeMiniAppButton().catch(() => {});
 });
