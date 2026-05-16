@@ -15,12 +15,12 @@ const T = {
   bindPrompt: '\u041D\u0430\u0436\u043C\u0438\u0442\u0435 \u043A\u043D\u043E\u043F\u043A\u0443 \u043D\u0438\u0436\u0435 \u0438 \u043E\u0442\u043F\u0440\u0430\u0432\u044C\u0442\u0435 \u043A\u043E\u043D\u0442\u0430\u043A\u0442 \u0441 \u0442\u0435\u043C \u0436\u0435 \u043D\u043E\u043C\u0435\u0440\u043E\u043C, \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u0443\u043A\u0430\u0437\u0430\u043D \u0443 \u0432\u0430\u0441 \u0432 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0435.',
   bindSuccess: '\u2705 \u041D\u043E\u043C\u0435\u0440 \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u043F\u0440\u0438\u0432\u044F\u0437\u0430\u043D!',
   openAppMenu: '\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435',
-  devKeyboard: 'DEV',
-  publicKeyboard: '\u041F\u0443\u0431\u043B\u0438\u0447\u043D\u0430\u044F',
-  devReady: '\uD83D\uDEE0 \u0414\u043B\u044F \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0430 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B \u0434\u0432\u0435 \u043A\u043D\u043E\u043F\u043A\u0438: DEV \u0438 \u043F\u0443\u0431\u043B\u0438\u0447\u043D\u0430\u044F \u0432\u0435\u0440\u0441\u0438\u044F. \u041E\u0431\u044B\u0447\u043D\u044B\u0435 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438 \u0432\u0438\u0434\u044F\u0442 \u0442\u043E\u043B\u044C\u043A\u043E \u0441\u0442\u0430\u0431\u0438\u043B\u044C\u043D\u0443\u044E \u0432\u0435\u0440\u0441\u0438\u044E.',
+  devInlineButton: 'DEV',
+  publicInlineButton: '\u041F\u0443\u0431\u043B\u0438\u0447\u043D\u0430\u044F',
+  devReady: '\uD83D\uDEE0 \u0414\u043B\u044F \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u044B \u0434\u0432\u0435 \u043A\u043D\u043E\u043F\u043A\u0438: DEV \u0438 \u043F\u0443\u0431\u043B\u0438\u0447\u043D\u0430\u044F \u0432\u0435\u0440\u0441\u0438\u044F. \u041D\u0438\u0436\u043D\u044F\u044F \u0441\u0438\u0441\u0442\u0435\u043C\u043D\u0430\u044F \u043A\u043D\u043E\u043F\u043A\u0430 \u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u0430 \u043F\u0443\u0431\u043B\u0438\u0447\u043D\u043E\u0439.',
   successPublic: '\uD83E\uDDE1 \u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043C\u0430\u0433\u0430\u0437\u0438\u043D\u0430 \u0442\u0435\u043F\u0435\u0440\u044C \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u043E \u0447\u0435\u0440\u0435\u0437 \u043A\u043D\u043E\u043F\u043A\u0443 \u0432 \u043D\u0438\u0436\u043D\u0435\u043C \u043B\u0435\u0432\u043E\u043C \u0443\u0433\u043B\u0443.',
-  devOnly: 'DEV-\u043A\u043D\u043E\u043F\u043A\u0438 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u044B \u0442\u043E\u043B\u044C\u043A\u043E \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0443.',
-  publicEnabled: '\u041F\u0443\u0431\u043B\u0438\u0447\u043D\u0430\u044F \u043A\u043D\u043E\u043F\u043A\u0430 \u0432\u043A\u043B\u044E\u0447\u0435\u043D\u0430.',
+  devOnly: 'DEV-\u043A\u043D\u043E\u043F\u043A\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u0430 \u0442\u043E\u043B\u044C\u043A\u043E \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u0447\u0438\u043A\u0443.',
+  publicEnabled: '\u041F\u0443\u0431\u043B\u0438\u0447\u043D\u0430\u044F \u043A\u043D\u043E\u043F\u043A\u0430 \u0432\u043A\u043B\u044E\u0447\u0435\u043D\u0430. \u0421\u0442\u0430\u0440\u0430\u044F \u043D\u0438\u0436\u043D\u044F\u044F \u043A\u043B\u0430\u0432\u0438\u0430\u0442\u0443\u0440\u0430 \u0443\u0431\u0440\u0430\u043D\u0430.',
   contactRequired: '\u0414\u043B\u044F \u043F\u0440\u0438\u0432\u044F\u0437\u043A\u0438 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0442\u0435 \u043A\u043D\u043E\u043F\u043A\u0443 \u00AB\uD83D\uDCF1 \u041F\u043E\u0434\u0435\u043B\u0438\u0442\u044C\u0441\u044F \u043D\u043E\u043C\u0435\u0440\u043E\u043C\u00BB.',
   ownPhoneRequired: '\u041F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u043E\u0442\u043F\u0440\u0430\u0432\u044C\u0442\u0435 \u0438\u043C\u0435\u043D\u043D\u043E \u0441\u0432\u043E\u0439 \u043D\u043E\u043C\u0435\u0440 \u0447\u0435\u0440\u0435\u0437 \u0441\u0438\u0441\u0442\u0435\u043C\u043D\u0443\u044E \u043A\u043D\u043E\u043F\u043A\u0443 Telegram.',
   phoneReadFailed: '\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u043F\u0440\u043E\u0447\u0438\u0442\u0430\u0442\u044C \u043D\u043E\u043C\u0435\u0440. \u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0435\u0449\u0451 \u0440\u0430\u0437.',
@@ -38,6 +38,13 @@ function normalizePhone(phone) {
 
 function isDeveloperTelegramId(telegramId) {
   return String(telegramId || '') === DEVELOPER_TELEGRAM_ID;
+}
+
+function webAppUrl(baseUrl, branch) {
+  const u = new URL(baseUrl);
+  u.searchParams.set('zma_branch', branch);
+  u.searchParams.set('v', '932');
+  return u.toString();
 }
 
 function tgApi(method, data) {
@@ -140,6 +147,16 @@ function postJson(targetUrl, payload) {
   });
 }
 
+async function removeReplyKeyboard(chatId, text = '') {
+  await tgApi('sendMessage', {
+    chat_id: String(chatId),
+    text: text || T.bindSuccess,
+    reply_markup: {
+      remove_keyboard: true
+    }
+  });
+}
+
 async function sendBindKeyboard(chatId) {
   const keyboard = {
     keyboard: [
@@ -158,23 +175,13 @@ async function sendBindKeyboard(chatId) {
   });
 }
 
-async function removeReplyKeyboard(chatId) {
-  await tgApi('sendMessage', {
-    chat_id: String(chatId),
-    text: T.bindSuccess,
-    reply_markup: {
-      remove_keyboard: true
-    }
-  });
-}
-
 async function setPublicNativeMiniAppButton(chatId = null) {
   const payload = {
     menu_button: {
       type: 'web_app',
       text: T.openAppMenu,
       web_app: {
-        url: MINI_APP_URL
+        url: webAppUrl(MINI_APP_URL, 'public')
       }
     }
   };
@@ -187,28 +194,28 @@ async function setPublicNativeMiniAppButton(chatId = null) {
 async function sendDeveloperMiniAppButtons(chatId) {
   await setPublicNativeMiniAppButton(chatId);
 
+  await removeReplyKeyboard(chatId, T.devReady);
+
   await tgApi('sendMessage', {
     chat_id: String(chatId),
     text: T.devReady,
     reply_markup: {
-      keyboard: [
+      inline_keyboard: [
         [
           {
-            text: T.devKeyboard,
+            text: T.devInlineButton,
             web_app: {
-              url: DEV_MINI_APP_URL
+              url: webAppUrl(DEV_MINI_APP_URL, 'dev')
             }
           },
           {
-            text: T.publicKeyboard,
+            text: T.publicInlineButton,
             web_app: {
-              url: MINI_APP_URL
+              url: webAppUrl(MINI_APP_URL, 'public')
             }
           }
         ]
-      ],
-      resize_keyboard: true,
-      one_time_keyboard: false
+      ]
     }
   });
 }
@@ -256,7 +263,7 @@ async function handleMessage(message) {
 
   if (text === '/public') {
     await setPublicNativeMiniAppButton(chatId);
-    await sendError(chatId, T.publicEnabled);
+    await removeReplyKeyboard(chatId, T.publicEnabled);
     return;
   }
 
@@ -306,7 +313,7 @@ async function handleMessage(message) {
     return;
   }
 
-  await removeReplyKeyboard(chatId);
+  await removeReplyKeyboard(chatId, T.bindSuccess);
   await setPublicNativeMiniAppButton(chatId);
   await sendSuccessMessage(chatId, telegramId);
 }
