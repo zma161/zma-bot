@@ -175,6 +175,28 @@ async function sendBindKeyboard(chatId) {
   });
 }
 
+async function setCommandsMenuButton(chatId = null) {
+  const payload = {
+    menu_button: {
+      type: 'commands'
+    }
+  };
+
+  if (chatId) payload.chat_id = String(chatId);
+
+  await tgApi('setChatMenuButton', payload);
+}
+
+async function requireContactBeforeMiniApp(chatId, text = '') {
+  await setCommandsMenuButton(chatId);
+
+  if (text) {
+    await sendError(chatId, text);
+  }
+
+  await sendBindKeyboard(chatId);
+}
+
 async function setPublicNativeMiniAppButton(chatId = null) {
   const payload = {
     menu_button: {
@@ -252,30 +274,26 @@ async function handleMessage(message) {
 
   if (text === '/dev') {
     if (!isDeveloperTelegramId(telegramId)) {
-      await setPublicNativeMiniAppButton(chatId);
-      await sendError(chatId, T.devOnly);
+      await requireContactBeforeMiniApp(chatId, T.devOnly);
       return;
     }
 
-    await sendDeveloperMiniAppButtons(chatId);
+    await requireContactBeforeMiniApp(chatId);
     return;
   }
 
   if (text === '/public') {
-    await setPublicNativeMiniAppButton(chatId);
-    await removeReplyKeyboard(chatId, T.publicEnabled);
+    await requireContactBeforeMiniApp(chatId);
     return;
   }
 
   if (text === '/start' || text === '/start bind_phone') {
-    await setPublicNativeMiniAppButton(chatId);
-    await sendBindKeyboard(chatId);
+    await requireContactBeforeMiniApp(chatId);
     return;
   }
 
   if (!message.contact) {
-    await setPublicNativeMiniAppButton(chatId);
-    await sendError(chatId, T.contactRequired);
+    await requireContactBeforeMiniApp(chatId, T.contactRequired);
     return;
   }
 
@@ -283,14 +301,14 @@ async function handleMessage(message) {
   const contactUserId = String(contact.user_id || '');
 
   if (contactUserId && telegramId && contactUserId !== telegramId) {
-    await sendError(chatId, T.ownPhoneRequired);
+    await requireContactBeforeMiniApp(chatId, T.ownPhoneRequired);
     return;
   }
 
   const phone = normalizePhone(contact.phone_number || '');
 
   if (!phone) {
-    await sendError(chatId, T.phoneReadFailed);
+    await requireContactBeforeMiniApp(chatId, T.phoneReadFailed);
     return;
   }
 
@@ -304,12 +322,12 @@ async function handleMessage(message) {
   });
 
   if (!bindResult) {
-    await sendError(chatId, T.serverFailed);
+    await requireContactBeforeMiniApp(chatId, T.serverFailed);
     return;
   }
 
   if (!bindResult.ok) {
-    await sendError(chatId, String(bindResult.message || T.bindFailed));
+    await requireContactBeforeMiniApp(chatId, String(bindResult.message || T.bindFailed));
     return;
   }
 
@@ -362,5 +380,5 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Bot server started on port ${PORT}`);
-  setPublicNativeMiniAppButton().catch(() => {});
+  setCommandsMenuButton().catch(() => {});
 });
